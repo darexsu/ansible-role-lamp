@@ -1,8 +1,8 @@
 ---
 galaxy_info:
   author: "darexsu"
-  role_name: "lemp"
-  description: "install and configure LEMP stack"
+  role_name: "lamp"
+  description: "install and configure LAMP stack"
   company: ""
   license: "license (MIT)"
   min_ansible_version: 2.9
@@ -19,4 +19,4 @@ galaxy_info:
       versions:
         - 8
   galaxy_tags:
-    - lemp
+    - lamp
