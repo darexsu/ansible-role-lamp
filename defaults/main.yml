@@ -1,0 +1,182 @@
+---
+#    LAMP
+#      |
+#    Apache
+#      |
+#     / \
+# MySQL MariaDB
+#     \ /
+#      |
+#     PHP
+
+# LAMP
+lamp:
+  enabled: false
+  domen: "example.site"
+  project_dir: "/var/www/html/"
+
+# Apache
+apache:
+  enabled: false
+  service:
+    enabled: true
+    state: "started"
+
+# Apache -> install
+apache_install:
+  enabled: false
+
+# Apache -> config -> apache.conf
+apache_conf:
+  enabled: false
+  file: "{{ apache_const[ansible_os_family]['conf_file'] }}"
+  src: "{{ apache_const[ansible_os_family]['conf_src'] }}"
+  backup: false
+  data:
+    apache_user: "www-data"
+    apache_group: "www-data"
+
+# Apache -> config -> modules
+apache_modules:
+  enabled: false
+  mods_enabled: [rewrite, proxy, proxy_fcgi]
+  mods_disabled: []
+
+# Apache -> config -> {virtualhost}.conf
+apache_virtualhost:
+  default_conf:
+    enabled: false
+    file: "{{ apache_const[ansible_os_family]['virtualhost_default_file'] }}"
+    state: "present"
+    src: "../../darexsu.lamp/templates/lamp_apache_virtualhost.j2"
+    backup: false
+    data:
+      ip: "*"
+      port: "80"
+      ServerName: "{{ lamp.domen }}"
+      ServerAdmin: "webmaster@localhost"
+      DocumentRoot: "{{ lamp.project_dir }}"
+      ErrorLog: "/var/log/{{ apache_const[ansible_os_family]['service_name'] }}/error.log"
+      CustomLog: "/var/log/{{ apache_const[ansible_os_family]['service_name'] }}/access.log combined"
+      SSLEngine: ""
+      SSLCertificateFile: ""
+      SSLCertificateKeyFile: ""
+      unix_socket:
+        enabled: true
+        file: "php{{ php.version }}-fpm.sock"
+
+# Apache -> constants
+apache_const:
+  Debian:
+    dependencies: []
+    packages: [apache2]
+    service_name: "apache2"
+    conf_file: "apache2.conf"
+    conf_path: "/etc/apache2/"
+    conf_src: "apache_conf_Debian.j2"
+    virtualhost_path: "/etc/apache2/sites-available/"
+    virtualhost_path_enabled: "/etc/apache2/sites-enabled/"
+    virtualhost_default_file: "000-default.conf"
+    mods_enabled_path: "/etc/apache2/mods-enabled"
+    mods_available_path: "/etc/apache2/mods-available"
+  RedHat:
+    dependencies: []
+    packages: [httpd]
+    service_name: "httpd"
+    conf_file: "httpd.conf"
+    conf_path: "/etc/httpd/conf/"
+    conf_src: "apache_conf_RedHat.j2"
+    virtualhost_path: "/etc/httpd/conf.d/"
+    virtualhost_default_file: "welcome.conf"
+    mods_available_path: "/etc/httpd/conf.modules.d/"
+    mods_file: [00-base.conf, 00-dav.conf, 00-lua.conf, 00-mpm.conf, 00-optional.conf, 00-proxy.conf, 00-systemd.conf, 01-cgi.conf, 10-h2.conf, 10-proxy_h2.conf]
+
+# MariaDB
+mariadb:
+  enabled: false
+  repo: "mariadb"
+  version: "10.5"
+  service:
+    state: "started"
+    enabled: true
+
+# MariaDB -> install
+mariadb_install:
+  enabled: false
+
+# MySQL
+mysql:
+  enabled: false
+  repo: "mysql"
+  version: "8.0"
+  service:
+    state: "started"
+    enabled: true
+
+# MySQL -> install
+mysql_install:
+  enabled: false
+
+# PHP
+php:
+  enabled: false
+  version: "7.4"
+  repo: "third_party"
+  service:
+    enabled: true
+    state: "started"
+
+# PHP -> install
+php_install:
+  enabled: false
+  modules: [common, fpm]
+
+# PHP -> config -> php.fpm
+php_fpm:
+  www_conf:
+    enabled: false
+    file: "www.conf"
+    state: "present"
+    src: "php_fpm.j2"
+    backup: false
+    data:
+      webserver_user: "www-data"
+      webserver_group: "www-data"
+      pm: "dynamic"
+      pm_max_children: "10"
+      pm_start_servers: "5"
+      pm_min_spare_servers: "5"
+      pm_max_spare_servers: "5"
+      pm_max_requests: "500"
+      tcp_ip_socket:
+        enabled: false
+        listen: "127.0.0.1:9000"
+      unix_socket:
+        enabled: true
+        file: "php{{ php.version }}-fpm.sock"
+        user: "www-data"
+        group: "www-data"
+
+# FirewallD
+firewalld:
+  enabled: false
+  service:
+    enabled: true
+    state: "started"
+
+# FirewallD -> rules
+firewalld_rules:
+  service_http:
+    enabled: false
+    zone: "public"
+    state: "enabled"
+    service: "http"
+    permanent: true
+    immediate: true
+  service_https:
+    enabled: false
+    zone: "public"
+    state: "enabled"
+    service: "https"
+    permanent: true
+    immediate: true

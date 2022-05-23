@@ -1,0 +1,55 @@
+---
+- name: merge dictionaries
+  block:
+    - include_vars:
+        file: ../../darexsu.lamp/defaults/main.yml
+        name: lamp_default_vars
+
+    - name: merge default and new dictionaries
+      set_fact:
+        "{{ item.key }}": "{{ lamp_default_vars[item.key] | combine(merge[item.key], recursive=True)}}"
+      when: lamp_default_vars[item.key] is defined
+      with_dict: "{{ merge }}"
+
+    - name: combine defaults vars with merge dictionary
+      set_fact:
+        merge: "{{ lamp_default_vars | combine(merge, recursive=True)}}"
+  when: merge is defined
+
+- name: lamp role is disabled
+  meta: end_play
+  when: not lamp.enabled
+
+- name: "Make sure dir for project is present"
+  ansible.builtin.file:
+    path: "{{ lamp.project_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: "Include role -> darexsu.php"
+  include_role:
+    name: darexsu.php
+    public: true
+  when: php.enabled
+
+- name: "Include role -> darexsu.apache"
+  include_role:
+    name: darexsu.apache
+  when: apache.enabled
+
+- name: "Include role -> darexsu.mariadb"
+  include_role:
+    name: darexsu.mariadb
+  when: mariadb.enabled
+
+- name: "Include role -> darexsu.mysql"
+  include_role:
+    name: darexsu.mysql
+  when: mysql.enabled
+
+- name: "Include role -> darexsu.firewalld"
+  include_role:
+    name: darexsu.firewalld
+  when: firewalld.enabled
