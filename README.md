@@ -122,7 +122,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   tasks:
     - name: role darexsu LAMP
       include_role:
-        name: darexsu.LAMP
+        name: darexsu.lamp
 ```
 ##### Install and configure: LAMP with MySQL (merge version)
 ```yaml
@@ -192,7 +192,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   tasks:
     - name: role darexsu LAMP
       include_role:
-        name: darexsu.LAMP
+        name: darexsu.lamp
 ```
 ##### Install: LAMP with MariaDB (merge version)
 ```yaml
@@ -237,7 +237,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   tasks:
     - name: role darexsu LAMP
       include_role:
-        name: darexsu.LAMP
+        name: darexsu.lamp
 ```
 ##### Install: LAMP with MySQL (merge version)
 ```yaml
@@ -282,7 +282,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   tasks:
     - name: role darexsu LAMP
       include_role:
-        name: darexsu.LAMP
+        name: darexsu.lamp
 ```
 ##### Install and configure: LAMP with MariaDB (full version)
 ```yaml
@@ -427,7 +427,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   tasks:
     - name: role darexsu LAMP
       include_role:
-        name: darexsu.LAMP
+        name: darexsu.lamp
 ```
 ##### Install and configure: LAMP with MySQL (full version)
 ```yaml
@@ -572,7 +572,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   tasks:
     - name: role darexsu LAMP
       include_role:
-        name: darexsu.LAMP
+        name: darexsu.lamp
 ```
 ##### Install: LAMP with MariaDB (full version)
 ```yaml
@@ -628,7 +628,7 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   tasks:
     - name: role darexsu LAMP
       include_role:
-        name: darexsu.LAMP
+        name: darexsu.lamp
 ```
 ##### Install: LAMP with MySQL (full version)
 ```yaml
@@ -681,5 +681,5 @@ Your vars [host_vars]  -->  default vars [current role] --> default vars [includ
   tasks:
     - name: role darexsu LAMP
       include_role:
-        name: darexsu.LAMP
+        name: darexsu.lamp
 ```
